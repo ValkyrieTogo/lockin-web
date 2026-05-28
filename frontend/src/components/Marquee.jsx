@@ -36,7 +36,7 @@ function Stat({ value, suffix = "", label, testId }) {
 
   return (
     <div ref={ref} data-testid={testId}>
-      <div className="font-display text-5xl md:text-6xl font-light tracking-tighter text-neutral-900">
+      <div className="font-display text-4xl md:text-5xl font-light tracking-tighter text-neutral-900">
         {count.toLocaleString()}
         <span className="text-emerald-600">{suffix}</span>
       </div>
@@ -51,7 +51,7 @@ export default function Marquee() {
   return (
     <section
       data-testid="social-proof-section"
-      className="relative py-16 md:py-20 bg-white border-y border-neutral-100"
+      className="relative py-12 md:py-14 bg-white border-y border-neutral-100"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-6">
         <Stat value={12480} suffix="+" label="Locked-in users" testId="stat-users" />

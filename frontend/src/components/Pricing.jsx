@@ -61,7 +61,7 @@ export default function Pricing() {
     <section
       id="store"
       data-testid="pricing-section"
-      className="relative py-24 md:py-40 bg-white overflow-hidden"
+      className="relative py-20 md:py-28 bg-white overflow-hidden"
     >
       {/* Soft accent backdrop */}
       <div className="absolute inset-0 pointer-events-none">
@@ -81,7 +81,7 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="mt-16 max-w-5xl mx-auto reveal">
+        <div className="mt-12 max-w-5xl mx-auto reveal">
           <div className="rounded-[28px] bg-white border border-neutral-200 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.18)] p-8 md:p-12 grid md:grid-cols-2 gap-10 items-center">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-[11px] uppercase tracking-[0.2em]">

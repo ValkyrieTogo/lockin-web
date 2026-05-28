@@ -38,7 +38,7 @@ export default function Footer() {
       data-testid="site-footer"
       className="relative bg-neutral-950 text-white"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-24 md:pt-32 pb-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16 md:pt-20 pb-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Newsletter */}
           <div className="reveal">
@@ -122,21 +122,14 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Massive logotype */}
-        <div className="mt-24 md:mt-32 select-none">
-          <h2
-            data-testid="footer-logotype"
-            className="font-display font-light tracking-tighter text-[20vw] md:text-[18vw] leading-none text-white/[0.05]"
-          >
-            LOCKIN.
-          </h2>
-        </div>
-
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/45">
-          <div>© {new Date().getFullYear()} Lockin Labs. All rights reserved.</div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Crafted for deep work.
+        {/* Wordmark + meta */}
+        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 font-display text-lg" data-testid="footer-logotype">
+            <span className="inline-block w-2 h-2 rounded-sm bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]" />
+            <span className="font-semibold tracking-tight">Lockin</span>
+          </div>
+          <div className="text-xs text-white/45">
+            © {new Date().getFullYear()} Lockin Labs. Crafted for deep work.
           </div>
         </div>
       </div>

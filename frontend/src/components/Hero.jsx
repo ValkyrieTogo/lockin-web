@@ -48,7 +48,7 @@ export default function Hero() {
             companion app that tracks every minute you reclaim.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-3">
+          <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <Button
               asChild
               data-testid="hero-primary-cta"
@@ -72,7 +72,7 @@ export default function Hero() {
             </Button>
           </div>
 
-          <div className="mt-14 flex items-center gap-8">
+          <div className="mt-10 flex items-center gap-8">
             <div data-testid="hero-stat-1">
               <div className="font-display text-3xl font-light text-neutral-900">3.2h</div>
               <div className="text-xs uppercase tracking-[0.18em] text-neutral-500 mt-1">

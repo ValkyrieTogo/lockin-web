@@ -31,7 +31,7 @@ export default function Testimonials() {
   return (
     <section
       data-testid="testimonials-section"
-      className="relative py-24 md:py-40 bg-[#F5F5F7]"
+      className="relative py-20 md:py-28 bg-[#F5F5F7]"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
@@ -55,7 +55,7 @@ export default function Testimonials() {
           </div>
         </div>
 
-        <div className="mt-14 grid md:grid-cols-3 gap-5 md:gap-6">
+        <div className="mt-10 grid md:grid-cols-3 gap-5 md:gap-6">
           {TESTIMONIALS.map((t, i) => (
             <figure
               key={t.name}

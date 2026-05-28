@@ -37,7 +37,7 @@ export default function FAQ() {
     <section
       id="faq"
       data-testid="faq-section"
-      className="relative py-24 md:py-40 bg-white"
+      className="relative py-20 md:py-28 bg-white"
     >
       <div className="max-w-3xl mx-auto px-6 md:px-12">
         <div className="text-center reveal">
@@ -52,7 +52,7 @@ export default function FAQ() {
         <Accordion
           type="single"
           collapsible
-          className="mt-14 reveal"
+          className="mt-10 reveal"
           data-testid="faq-accordion"
         >
           {FAQS.map((f, i) => (

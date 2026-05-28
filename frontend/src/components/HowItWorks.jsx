@@ -32,7 +32,7 @@ export default function HowItWorks() {
     <section
       id="how"
       data-testid="how-it-works-section"
-      className="relative py-24 md:py-40 bg-white"
+      className="relative py-20 md:py-28 bg-white"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="max-w-3xl reveal">
@@ -48,7 +48,7 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        <div className="mt-16 md:mt-24 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="mt-12 md:mt-16 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Image */}
           <div className="relative reveal">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-neutral-200 bg-neutral-50 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.12)]">

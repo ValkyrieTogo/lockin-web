@@ -1,19 +1,11 @@
-import { useState } from "react";
-import { Check, Loader2, ShoppingBag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Check, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { createOrder } from "@/lib/api";
+  UNIT_PRICE_IDR,
+  ORIGINAL_PRICE_IDR,
+  formatIDR,
+} from "@/lib/format";
 
 const PERKS = [
   "Aluminium unibody NFC brick",
@@ -21,41 +13,15 @@ const PERKS = [
   "Strict mode + emergency unbrick",
   "Scheduled brick modes & alarm",
   "Streaks, badges & session reports",
-  "Free worldwide shipping",
+  "Free shipping across Indonesia",
 ];
 
 export default function Pricing() {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", quantity: 1 });
-  const [done, setDone] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name || !form.email) {
-      toast.error("Please fill in your name and email");
-      return;
-    }
-    setLoading(true);
-    try {
-      await createOrder({
-        name: form.name,
-        email: form.email,
-        quantity: Number(form.quantity) || 1,
-        variant: "lockin-classic",
-      });
-      setDone(true);
-      toast.success("You're on the list!", {
-        description: "We'll email you when Lockin ships.",
-      });
-    } catch (err) {
-      toast.error("Couldn't place reservation", {
-        description: err?.response?.data?.detail || "Try again in a moment.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const savings = Math.round(
+    ((ORIGINAL_PRICE_IDR - UNIT_PRICE_IDR) / ORIGINAL_PRICE_IDR) * 100
+  );
 
   return (
     <section
@@ -63,7 +29,6 @@ export default function Pricing() {
       data-testid="pricing-section"
       className="relative py-20 md:py-28 bg-white overflow-hidden"
     >
-      {/* Soft accent backdrop */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[820px] h-[820px] rounded-full bg-emerald-100/40 blur-[140px]" />
       </div>
@@ -77,7 +42,7 @@ export default function Pricing() {
             One device. A lifetime of focus.
           </h2>
           <p className="mt-5 text-neutral-600 font-light">
-            Reserve your Lockin today. Ships in early 2026.
+            Ships across Indonesia. Free delivery, 30-day money-back guarantee.
           </p>
         </div>
 
@@ -91,15 +56,15 @@ export default function Pricing() {
                 Lockin <span className="text-neutral-400">Classic</span>
               </h3>
 
-              <div className="mt-6 flex items-baseline gap-3">
+              <div className="mt-6 flex items-baseline gap-3 flex-wrap">
                 <div className="font-display text-5xl md:text-6xl tracking-tighter text-neutral-900">
-                  $89
+                  {formatIDR(UNIT_PRICE_IDR)}
                 </div>
                 <div className="text-neutral-400 line-through text-lg">
-                  $119
+                  {formatIDR(ORIGINAL_PRICE_IDR)}
                 </div>
-                <span className="ml-2 text-xs uppercase tracking-[0.2em] text-emerald-700">
-                  Save 25%
+                <span className="text-xs uppercase tracking-[0.2em] text-emerald-700">
+                  Save {savings}%
                 </span>
               </div>
 
@@ -117,125 +82,14 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              <Dialog
-                open={open}
-                onOpenChange={(o) => {
-                  setOpen(o);
-                  if (!o) setDone(false);
-                }}
+              <Button
+                data-testid="pricing-buy-button"
+                onClick={() => navigate("/checkout")}
+                className="mt-10 h-12 px-7 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 text-sm font-medium"
               >
-                <DialogTrigger asChild>
-                  <Button
-                    data-testid="pricing-buy-button"
-                    className="mt-10 h-12 px-7 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 text-sm font-medium"
-                  >
-                    <ShoppingBag size={16} className="mr-2" />
-                    Reserve yours
-                  </Button>
-                </DialogTrigger>
-                <DialogContent
-                  data-testid="order-dialog"
-                  className="bg-white border-neutral-200 text-neutral-900 max-w-md"
-                >
-                  {!done ? (
-                    <form onSubmit={handleSubmit}>
-                      <DialogHeader>
-                        <DialogTitle className="font-display text-2xl font-medium text-neutral-900">
-                          Reserve your Lockin
-                        </DialogTitle>
-                        <DialogDescription className="text-neutral-600">
-                          We'll email you the moment your Lockin is ready to
-                          ship. No payment required today.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="space-y-4 py-4">
-                        <div>
-                          <Label htmlFor="name" className="text-neutral-700 text-sm">
-                            Full name
-                          </Label>
-                          <Input
-                            id="name"
-                            data-testid="order-input-name"
-                            value={form.name}
-                            onChange={(e) =>
-                              setForm({ ...form, name: e.target.value })
-                            }
-                            placeholder="Ada Lovelace"
-                            className="mt-1 bg-white border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus-visible:ring-emerald-500/40"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="email" className="text-neutral-700 text-sm">
-                            Email
-                          </Label>
-                          <Input
-                            id="email"
-                            type="email"
-                            data-testid="order-input-email"
-                            value={form.email}
-                            onChange={(e) =>
-                              setForm({ ...form, email: e.target.value })
-                            }
-                            placeholder="you@focus.com"
-                            className="mt-1 bg-white border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus-visible:ring-emerald-500/40"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="qty" className="text-neutral-700 text-sm">
-                            Quantity
-                          </Label>
-                          <Input
-                            id="qty"
-                            type="number"
-                            min={1}
-                            max={10}
-                            data-testid="order-input-quantity"
-                            value={form.quantity}
-                            onChange={(e) =>
-                              setForm({ ...form, quantity: e.target.value })
-                            }
-                            className="mt-1 bg-white border-neutral-200 text-neutral-900 focus-visible:ring-emerald-500/40"
-                          />
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <Button
-                          type="submit"
-                          disabled={loading}
-                          data-testid="order-submit-button"
-                          className="w-full h-11 rounded-full bg-neutral-900 text-white hover:bg-neutral-800"
-                        >
-                          {loading ? (
-                            <Loader2 size={16} className="animate-spin" />
-                          ) : (
-                            "Confirm reservation"
-                          )}
-                        </Button>
-                      </DialogFooter>
-                    </form>
-                  ) : (
-                    <div className="py-6 text-center" data-testid="order-success">
-                      <div className="w-14 h-14 rounded-full bg-emerald-100 border border-emerald-200 flex items-center justify-center mx-auto">
-                        <Check size={22} className="text-emerald-700" />
-                      </div>
-                      <h3 className="font-display text-2xl font-medium mt-5 text-neutral-900">
-                        You're locked in.
-                      </h3>
-                      <p className="text-neutral-600 mt-2 text-sm">
-                        We'll send you a confirmation at{" "}
-                        <span className="text-neutral-900">{form.email}</span>.
-                      </p>
-                      <Button
-                        onClick={() => setOpen(false)}
-                        data-testid="order-close-button"
-                        className="mt-6 rounded-full bg-neutral-900 text-white hover:bg-neutral-800"
-                      >
-                        Close
-                      </Button>
-                    </div>
-                  )}
-                </DialogContent>
-              </Dialog>
+                <ShoppingBag size={16} className="mr-2" />
+                Checkout · {formatIDR(UNIT_PRICE_IDR)}
+              </Button>
             </div>
 
             {/* Product visual */}

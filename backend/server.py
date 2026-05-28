@@ -40,8 +40,18 @@ class NewsletterEntry(BaseModel):
 class OrderCreate(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     email: EmailStr
+    phone: Optional[str] = None
     quantity: int = Field(ge=1, le=10, default=1)
     variant: Optional[str] = "lockin-classic"
+    # shipping address
+    address_line: Optional[str] = None
+    city: Optional[str] = None
+    province: Optional[str] = None
+    postal_code: Optional[str] = None
+    country: Optional[str] = "Indonesia"
+    # payment
+    payment_method: Optional[str] = "bank_transfer"
+    promo_code: Optional[str] = None
     notes: Optional[str] = None
 
 
@@ -50,9 +60,22 @@ class OrderEntry(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     email: EmailStr
+    phone: Optional[str] = None
     quantity: int = 1
     variant: str = "lockin-classic"
+    address_line: Optional[str] = None
+    city: Optional[str] = None
+    province: Optional[str] = None
+    postal_code: Optional[str] = None
+    country: str = "Indonesia"
+    payment_method: str = "bank_transfer"
+    promo_code: Optional[str] = None
     notes: Optional[str] = None
+    # totals snapshot (IDR)
+    unit_price: int = 1399000
+    shipping: int = 0
+    discount: int = 0
+    total: int = 1399000
     status: str = "received"
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
@@ -101,7 +124,25 @@ async def list_newsletter():
 
 @api_router.post("/orders", response_model=OrderEntry, status_code=201)
 async def create_order(payload: OrderCreate):
-    entry = OrderEntry(**payload.model_dump())
+    UNIT_PRICE = 1399000  # IDR
+    qty = max(1, min(10, payload.quantity))
+    subtotal = UNIT_PRICE * qty
+    shipping = 0  # free shipping
+    discount = 0
+    code = (payload.promo_code or "").strip().upper()
+    if code == "LOCKIN10":
+        discount = int(subtotal * 0.10)
+    elif code == "FOCUS20":
+        discount = int(subtotal * 0.20)
+    total = subtotal + shipping - discount
+
+    entry = OrderEntry(
+        **payload.model_dump(),
+        unit_price=UNIT_PRICE,
+        shipping=shipping,
+        discount=discount,
+        total=total,
+    )
     await db.orders.insert_one(entry.model_dump())
     return entry
 

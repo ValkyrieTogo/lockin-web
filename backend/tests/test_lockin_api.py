@@ -124,6 +124,103 @@ class TestOrders:
         )
         assert r.status_code == 422
 
+    # ----- IDR pricing + new fields -----
+    def test_order_idr_pricing_default(self, session):
+        payload = {
+            "name": "TEST_IDR",
+            "email": _unique_email("idr"),
+            "phone": "+62 812 0000 0001",
+            "quantity": 1,
+            "address_line": "Jl. Sudirman 1",
+            "city": "Jakarta",
+            "province": "DKI Jakarta",
+            "postal_code": "12345",
+            "payment_method": "bank_transfer",
+            "country": "Indonesia",
+        }
+        r = session.post(f"{API}/orders", json=payload, timeout=15)
+        assert r.status_code == 201, r.text
+        b = r.json()
+        assert b["unit_price"] == 1399000
+        assert b["shipping"] == 0
+        assert b["discount"] == 0
+        assert b["total"] == 1399000
+        assert b["payment_method"] == "bank_transfer"
+        assert b["city"] == "Jakarta"
+        assert b["province"] == "DKI Jakarta"
+        assert b["postal_code"] == "12345"
+        assert b["country"] == "Indonesia"
+        assert b["phone"] == payload["phone"]
+        assert b["address_line"] == payload["address_line"]
+
+    def test_order_promo_lockin10(self, session):
+        r = session.post(
+            f"{API}/orders",
+            json={
+                "name": "TEST_promo10",
+                "email": _unique_email("p10"),
+                "quantity": 2,
+                "promo_code": "LOCKIN10",
+            },
+            timeout=15,
+        )
+        assert r.status_code == 201, r.text
+        b = r.json()
+        # subtotal = 2 * 1,399,000 = 2,798,000; 10% off = 279,800; total = 2,518,200
+        assert b["unit_price"] == 1399000
+        assert b["discount"] == 279800
+        assert b["total"] == 2518200
+        assert b["promo_code"] == "LOCKIN10"
+
+    def test_order_promo_focus20(self, session):
+        r = session.post(
+            f"{API}/orders",
+            json={
+                "name": "TEST_promo20",
+                "email": _unique_email("p20"),
+                "quantity": 1,
+                "promo_code": "focus20",  # lowercase, should be normalized
+            },
+            timeout=15,
+        )
+        assert r.status_code == 201, r.text
+        b = r.json()
+        # 1,399,000 * 20% = 279,800; total = 1,119,200
+        assert b["discount"] == 279800
+        assert b["total"] == 1119200
+
+    def test_order_invalid_promo_no_discount(self, session):
+        r = session.post(
+            f"{API}/orders",
+            json={
+                "name": "TEST_promoX",
+                "email": _unique_email("px"),
+                "quantity": 1,
+                "promo_code": "NOPE",
+            },
+            timeout=15,
+        )
+        assert r.status_code == 201
+        b = r.json()
+        assert b["discount"] == 0
+        assert b["total"] == 1399000
+
+    def test_order_empty_promo_no_discount(self, session):
+        r = session.post(
+            f"{API}/orders",
+            json={
+                "name": "TEST_promoE",
+                "email": _unique_email("pe"),
+                "quantity": 3,
+                "promo_code": "",
+            },
+            timeout=15,
+        )
+        assert r.status_code == 201
+        b = r.json()
+        assert b["discount"] == 0
+        assert b["total"] == 1399000 * 3
+
 
 # -------- Contact --------
 class TestContact:

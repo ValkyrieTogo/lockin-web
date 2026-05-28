@@ -1,0 +1,24 @@
+{
+  "summary": "Iteration 2: tested IDR pricing + Indonesian checkout flow end-to-end. Added 5 backend tests for new order fields, IDR pricing snapshot, and promo logic (LOCKIN10, FOCUS20, invalid, empty). All 20 pytest cases pass. Full Playwright E2E covered landing IDR display, /checkout navigation, qty stepper min/max, subtotal IDR formatting, valid/invalid promo, empty-form validation, all 4 payment options, Shadcn province Select, order POST -> success page (order id + Rp 2.518.200 + shipping destination), and back-to-home navigation. No issues found.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_lockin_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Frontend pricing math (10%/20%) is duplicated in CheckoutPage.jsx and backend server.py. Consider exposing a /api/orders/calculate or returning promo metadata to keep a single source of truth and avoid drift.",
+    "Order success page shows truncated order id (slice 0,8). Make sure the full id is stored/returned; currently fine because backend returns the full uuid.",
+    "Payment is MOCKED (no gateway) - already documented; surface this clearly in success copy or admin so QA does not assume real settlement.",
+    "Province field is required client-side but backend marks it Optional. Either tighten backend Pydantic (require province for IDR orders) or relax client validation - keep consistent."
+  ],
+  "updated_files": ["/app/backend/tests/test_lockin_api.py"],
+  "success_rate": {"backend": "100% (20/20)", "frontend": "100% (all assertions passed)"},
+  "test_credentials": "n/a - no auth in app",
+  "seed_data_creation": "Pytest creates TEST_-prefixed newsletter/contact/order documents in MongoDB (kept; no cleanup endpoint exists).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend lives in /app/backend/server.py (single file). All new pricing/promo logic is in POST /api/orders. CheckoutPage uses Shadcn Select for province - use page.click('[data-testid=\"checkout-province\"]') then page.get_by_role('option', name='...').click(force=True). qty stepper disables the min/max button (don't try to click past the limit; assert is_disabled() instead). Promo codes LOCKIN10 (10%) and FOCUS20 (20%) are normalized to upper-case. Payment is mocked - order just persists.",
+  "rca_of_the_issue": "n/a - no bugs encountered"
+}

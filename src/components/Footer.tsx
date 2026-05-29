@@ -8,11 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { subscribeNewsletter } from "@/lib/api";
 
-const COLUMNS = [
-  { title: "Product", items: ["Features", "How it works", "Store", "FAQ"] },
-  { title: "Company", items: ["About", "Press", "Careers", "Contact"] },
-  { title: "Resources", items: ["Help center", "Privacy", "Terms", "Returns"] },
+const PRODUCT_LINKS = [
+  { label: "Features", href: "#features" },
+  { label: "How it works", href: "#how" },
+  { label: "Store", href: "#store" },
+  { label: "FAQ", href: "#faq" },
 ];
+
+const CONTACT_EMAIL = "hello@lockin.so";
 
 export function Footer() {
   const [email, setEmail] = useState("");
@@ -80,27 +83,37 @@ export function Footer() {
             <p className="mt-3 text-xs text-white/40">No spam. Unsubscribe anytime.</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-            {COLUMNS.map((col) => (
-              <div key={col.title}>
-                <div className="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
-                  {col.title}
-                </div>
-                <ul className="space-y-3">
-                  {col.items.map((it) => (
-                    <li key={it}>
-                      <a
-                        href="#"
-                        data-testid={`footer-link-${it.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="text-sm text-white/70 hover:text-white transition-colors"
-                      >
-                        {it}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+          <div className="grid grid-cols-2 gap-8">
+            <div>
+              <div className="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+                Product
               </div>
-            ))}
+              <ul className="space-y-3">
+                {PRODUCT_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <a
+                      href={l.href}
+                      data-testid={`footer-link-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
+                      className="text-sm text-white/70 hover:text-white transition-colors"
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+                Get in touch
+              </div>
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                data-testid="footer-contact-email"
+                className="text-sm text-white/70 hover:text-white transition-colors"
+              >
+                {CONTACT_EMAIL}
+              </a>
+            </div>
           </div>
         </div>
 

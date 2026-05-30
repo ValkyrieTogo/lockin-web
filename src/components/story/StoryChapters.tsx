@@ -363,7 +363,7 @@ export function StoryChapters() {
                       {row.d}
                     </span>
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-white/5">
-                      <div className="story-bar h-full" style={{ ["--bar-w" as string]: `${row.w}%` }} />
+                      <div className="story-bar h-full" style={{ "--bar-w": `${row.w}%` } as CSSProperties} />
                     </div>
                   </div>
                 ))}

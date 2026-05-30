@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Mail } from "lucide-react";
+import { ArrowLeft, Check, Mail } from "lucide-react";
 
 export const metadata = {
   title: "Privacy Policy — Lockin",

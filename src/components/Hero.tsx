@@ -92,7 +92,15 @@ export function Hero() {
 
         <div className="lg:col-span-6 relative">
           <div className="relative aspect-square w-full max-w-[620px] mx-auto">
-            <div className="absolute inset-0 rounded-[40px] bg-gradient-to-br from-emerald-100 via-neutral-100 to-white blur-2xl opacity-80" />
+            <div className="breathe-aura absolute -inset-6 rounded-[48px] pointer-events-none" />
+            <div
+              className="breathe-ring pointer-events-none"
+              style={{ width: "116%", height: "116%" }}
+            />
+            <div
+              className="breathe-ring pointer-events-none"
+              style={{ width: "138%", height: "138%", animationDelay: "0.6s" }}
+            />
             <div className="relative aspect-square rounded-[36px] overflow-hidden border border-neutral-200 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.15)] bg-neutral-50">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

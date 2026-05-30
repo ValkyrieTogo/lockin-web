@@ -93,7 +93,11 @@ export function NotificationAvalanche({
         started.current = true;
         obs.disconnect();
         if (reduce) {
-          setPhase("locked");
+          if (variant === "relentless") {
+            setItems(FEED.slice(0, 5).map((f, i) => ({ ...f, uid: i })));
+          } else {
+            setPhase("locked");
+          }
           return;
         }
         void play();

@@ -50,7 +50,7 @@ export function Pricing() {
               <span className="cr-inner">One device. A lifetime of focus.</span>
             </span>
           </h2>
-          <p className="mt-5 text-neutral-600 font-light">
+          <p className="reveal mt-5 text-neutral-600 font-light">
             Ships across Indonesia. Free delivery, 30-day money-back guarantee.
           </p>
         </div>

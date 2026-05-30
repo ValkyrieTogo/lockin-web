@@ -88,10 +88,7 @@ export default function PrivacyPage() {
             <ArrowLeft size={16} />
             Back to home
           </Link>
-          <div className="flex items-center gap-2 font-display">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-emerald-600" />
-            <span className="font-semibold">Lockin</span>
-          </div>
+          <Logo size={26} wordmarkClassName="text-neutral-900" />
           <div className="w-[88px]" aria-hidden />
         </div>
       </header>

@@ -4,7 +4,9 @@ import { useEffect } from "react";
 
 export function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll<HTMLElement>(".reveal");
+    const els = document.querySelectorAll<HTMLElement>(
+      ".reveal, .clip-reveal, .grain-dissolve",
+    );
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
